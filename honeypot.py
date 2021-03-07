@@ -16,8 +16,7 @@ async def smiley_protocol(reader, writer):
     await writer.drain()
     writer.close()
   except ConnectionResetError:
-    print(ConnectionResetError)
-    pass
+    pass #do nothing, not useful for data collection
 
 async def launch_pot(address='127.0.0.1',port=8888):
   server = await asyncio.start_server(
