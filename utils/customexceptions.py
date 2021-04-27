@@ -1,0 +1,2 @@
+class CouldNotBeReady(Exception):
+	pass

@@ -13,4 +13,4 @@ Why? Just a fun weekend project
 python3.8 honeypot.py --port_start=0 --port_end=65535 --address=0.0.0.0 --log=honeypot.log
 
 ## TODO
-- Structured log
+- Tests
