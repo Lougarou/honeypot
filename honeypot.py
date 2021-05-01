@@ -18,7 +18,7 @@ async def smiley_protocol(reader, writer):
       message = data
     addr = writer.get_extra_info('peername')
     print([str(datetime.now().strftime("%m/%d/%Y, %H:%M:%S")),message, str(addr[0])+":"+str(addr[1])])
-    logger.info([(f"{message!r}"), f"{addr[0]!r}", f"{addr[1]!r}"])
+    logger.info([str(datetime.now().strftime("%m/%d/%Y, %H:%M:%S")),(f"{message!r}"), f"{addr[0]!r}", f"{addr[1]!r}"])
     writer.write(b":D")
     await writer.drain()
     writer.close()
@@ -28,15 +28,17 @@ async def smiley_protocol(reader, writer):
 async def launch_pot(address='127.0.0.1',port=8888):
   server = await asyncio.start_server(
     smiley_protocol, address, port)
+  try:
+    async with server:
+      await server.serve_forever()
+  except:
+    logger.error("failed to start "+str(port))
 
-  async with server:
-    await server.serve_forever()
-
-async def main(address="127.0.0.1", port_start=1, port_end=2**16-1, log='honeypot.log'):
+async def main(address="127.0.0.1", port_start=1, port_end=2**16-1, log='honeypot.csv'):
 
   logger.setLevel(logging.DEBUG)
   loggingStreamHandler = handlers.CSVTimedRotatingFileHandler(filename=log,
-															  header=["time", "message", "from", "port"])  # to save to file
+															  header=["time", "payload", "from", "port"])  # to save to file
   loggingStreamHandler.setFormatter(formatters.CSVFormatter())
   logger.addHandler(loggingStreamHandler)
   tasks = []
